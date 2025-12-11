@@ -1,6 +1,6 @@
-package main.java.champion.com.demo.infra.security;
+package champion.com.demo.infra.security;
 
-import champion.com.demo.repositories.UsuarioRepository;
+import champion.com.demo.domain.repositories.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

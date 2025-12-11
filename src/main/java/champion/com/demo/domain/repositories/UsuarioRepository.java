@@ -1,6 +1,6 @@
-package main.java.champion.com.demo.domain.repositories;
+package champion.com.demo.domain.repositories;
 
-import main.java.champion.com.demo.domain.user.Usuario;
+import champion.com.demo.domain.user.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

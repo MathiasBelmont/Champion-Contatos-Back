@@ -1,4 +1,4 @@
-package main.java.champion.com.demo.infra.security;
+package champion.com.demo.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package main.java.champion.com.demo.infra.security;
+package champion.com.demo.infra.security;
 
 import champion.com.demo.domain.user.Usuario;
 import com.auth0.jwt.JWT;

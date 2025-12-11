@@ -1,17 +1,14 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.8'
-	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'champion.com'
 version = '0.0.1-SNAPSHOT'
-description = 'Projeto carteira de contatos Champion Saúde Animal'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+	sourceCompatibility = '17'
 }
 
 configurations {
@@ -21,39 +18,29 @@ configurations {
 }
 
 repositories {
-	mavenCentral()
-}
-
-ext {
-	set('springCloudVersion', "2025.0.0")
-	set('tanzuScgExtensionsVersion', "1.0.0")
+	mavenCentral() // Isso diz ao Gradle para baixar da internet
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation' // Para validar DTOs
-    
-    // Driver do Banco
-    runtimeOnly 'org.postgresql:postgresql'
-    
-    // Lombok (Ajuda a limpar o código)
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    
-    // Biblioteca de Token JWT
-    implementation 'com.auth0:java-jwt:4.4.0'
+	// Spring Boot Básico
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-}
+	// Banco de Dados (PostgreSQL)
+	runtimeOnly 'org.postgresql:postgresql'
 
-dependencyManagement {
-	imports {
-		mavenBom "com.vmware.tanzu.springcloudgateway.extensions:extensions-bom:${tanzuScgExtensionsVersion}"
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
+	// Ferramenta para simplificar código (Lombok)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Token JWT
+	implementation 'com.auth0:java-jwt:4.4.0'
+
+	// Testes
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {

@@ -1,4 +1,4 @@
-package main.java.champion.com.demo.domain.user;
+package champion.com.demo.domain.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
