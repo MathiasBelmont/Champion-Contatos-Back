@@ -25,6 +25,7 @@ public class TokenService {
                     .withIssuer("auth-api")
                     .withSubject(usuario.getLogin())
                     .withExpiresAt(genExpirationDate())
+                    .withClaim("role", usuario.getRole().name())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao gerar token", exception);
