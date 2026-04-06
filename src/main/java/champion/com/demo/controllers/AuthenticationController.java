@@ -28,12 +28,16 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        try {
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
+            var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((Usuario) auth.getPrincipal());
+            var token = tokenService.generateToken((Usuario) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            return ResponseEntity.status(401).build();
+        }
     }
 
     @PostMapping("/register")
