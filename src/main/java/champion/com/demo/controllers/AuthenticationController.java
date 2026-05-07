@@ -36,6 +36,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(new LoginResponseDTO(token));
         } catch (org.springframework.security.core.AuthenticationException e) {
+            e.printStackTrace(); // <--- ADICIONE ISSO
             return ResponseEntity.status(401).build();
         }
     }

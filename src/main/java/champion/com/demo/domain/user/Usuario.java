@@ -5,57 +5,69 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "usuarios")
-@Entity(name = "usuarios")
+@Table(name = "USUARIO") // Nome exato da sua tabela no SQL
+@Entity(name = "Usuario")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Usuario implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // SERIAL no Postgres
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id")
     private Long id;
 
+    @Column(name = "Nome", nullable = false)
+    private String nome;
+
+    // Mapeia o atributo "login" do Java para a coluna "Usuario" do Banco de Dados
+    @Column(name = "Usuario", unique = true, nullable = false)
     private String login;
 
+    @Column(name = "Senha", nullable = false)
     private String senha;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "Tipo_usuario", nullable = false)
     private UserRole role;
 
-    // Construtor para criar usuario novo
-    public Usuario(String login, String senha, UserRole role){
+    // Construtor usado no Registo
+    public Usuario(String login, String senha, UserRole role) {
         this.login = login;
         this.senha = senha;
         this.role = role;
+        this.nome = "Utilizador Padrão"; // Pode alterar para receber o nome no RegisterDTO depois
     }
 
-    // -- Métodos obrigatórios do UserDetails --
+    // -- Métodos do UserDetails --
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Se for ADMIN tem permissão de ADMIN e USER, se não, só USER.
-        if(this.role == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.role == UserRole.GESTOR || this.role == UserRole.GESTOR_TI) {
+            return List.of(new SimpleGrantedAuthority("GESTOR"), new SimpleGrantedAuthority("AGENTE"));
+        } else {
+            return List.of(new SimpleGrantedAuthority("AGENTE"));
+        }
     }
 
     @Override
-    public String getPassword() {
-        return senha;
-    }
+    public String getPassword() { return senha; }
 
     @Override
-    public String getUsername() {
-        return login;
-    }
+    public String getUsername() { return login; }
 
     @Override
     public boolean isAccountNonExpired() { return true; }
@@ -65,24 +77,4 @@ public class Usuario implements UserDetails {
     public boolean isCredentialsNonExpired() { return true; }
     @Override
     public boolean isEnabled() { return true; }
-
-    public String getNome() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNome'");
-    }
-
-    public void setSenha(String encryptedPassword) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSenha'");
-    }
-
-    public void setRole(UserRole role2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setRole'");
-    }
-
-    public void setNome(String nome) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setNome'");
-    }
 }

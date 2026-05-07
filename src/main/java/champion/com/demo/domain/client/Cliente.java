@@ -1,14 +1,15 @@
 package champion.com.demo.domain.client;
 
+import champion.com.demo.domain.client.ClienteRequestDTO;
 import champion.com.demo.domain.user.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Table(name = "clientes")
-@Entity(name = "clientes")
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Cliente {

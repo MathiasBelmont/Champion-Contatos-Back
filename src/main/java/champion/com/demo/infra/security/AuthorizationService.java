@@ -1,4 +1,4 @@
-package champion.com.demo.services;
+package champion.com.demo.infra.security;
 
 import champion.com.demo.domain.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,12 @@ public class AuthorizationService implements UserDetailsService {
     @Autowired
     UsuarioRepository repository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByLogin(username);
-    }
+   @Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    UserDetails user = repository.findByLogin(username);
+    System.out.println(">>> Buscando usuário: " + username);
+    System.out.println(">>> Encontrado: " + (user != null ? "SIM" : "NÃO"));
+    return user;
+}
+
 }
