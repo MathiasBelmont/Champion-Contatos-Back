@@ -2,6 +2,7 @@ package champion.com.demo.domain.controllers;
 
 import champion.com.demo.domain.client.Cliente;
 import champion.com.demo.domain.client.ClienteRequestDTO;
+import champion.com.demo.services.ClienteService;
 import champion.com.demo.domain.user.Usuario;
 import champion.com.demo.domain.repositories.ClienteRepository;
 import champion.com.demo.domain.repositories.UsuarioRepository;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+
 import java.util.List;
 
 @RestController
@@ -28,6 +30,9 @@ public class ClienteController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private ClienteService service;
+
     // 1. Agente cria contato
     @PostMapping
     public ResponseEntity criarContato(@RequestBody ClienteRequestDTO data) {
@@ -36,7 +41,7 @@ public class ClienteController {
                 .getAuthentication()
                 .getPrincipal();
 
-        service.criarCliente(data, agenteLogado);
+        service.criarCliente(data, agenteLogado); // Agora o Java sabe quem é o 'service'
         return ResponseEntity.ok().build();
     }
 
