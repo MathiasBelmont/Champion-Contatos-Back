@@ -1,0 +1,24 @@
+
+CREATE TABLE IF NOT EXISTS USUARIO (
+    Id BIGSERIAL PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL,
+    Usuario VARCHAR(255) UNIQUE NOT NULL,
+    Senha VARCHAR(255) NOT NULL,
+    Tipo_usuario VARCHAR(50) NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS CLIENTE (
+    Id BIGSERIAL PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    Telefone VARCHAR(20),
+    Tipo_contato VARCHAR(50),
+    Agente_id BIGINT,
+    Aprovado BOOLEAN DEFAULT FALSE,
+    CONSTRAINT fk_agente FOREIGN KEY (Agente_id) REFERENCES USUARIO(Id) ON DELETE SET NULL
+);
+
+INSERT INTO USUARIO (Nome, Usuario, Senha, Tipo_usuario, ativo) 
+SELECT 'Administrador TI', 'admin@champion.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.7u41W3u', 'GESTOR_TI', true
+WHERE NOT EXISTS (SELECT 1 FROM USUARIO WHERE Usuario = 'admin@champion.com');
