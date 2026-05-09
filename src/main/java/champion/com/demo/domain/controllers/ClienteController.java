@@ -108,4 +108,12 @@ public class ClienteController {
 
         return ResponseEntity.ok("Cliente realocado com sucesso para o agente: " + novoAgente.getNome());
     }
+
+    // 6. Gestor vê contatos de um agente específico
+    @GetMapping("/agente/{id}")
+    @PreAuthorize("hasAuthority('GESTOR')")
+    public ResponseEntity<List<Cliente>> listarClientesPorAgente(@PathVariable Long id) {
+        // Usa o método que já existe no seu ClienteService
+        return ResponseEntity.ok(service.getClientesPorAgente(id));
+    }
 }

@@ -39,6 +39,9 @@ public class Usuario implements UserDetails {
     @Column(name = "Senha", nullable = false)
     private String senha;
 
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo = true;
+
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "Tipo_usuario", nullable = false)
@@ -76,5 +79,7 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() { return true; }
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { 
+        return this.ativo; 
+    }
 }
