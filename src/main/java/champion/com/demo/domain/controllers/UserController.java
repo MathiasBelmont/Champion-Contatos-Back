@@ -56,7 +56,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // 4. Atualizar dados do usuário
+    
+   // 4. Atualizar dados do usuário
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('GESTOR')")
     public ResponseEntity atualizarUsuario(@PathVariable Long id, @RequestBody Usuario dadosAtualizados) {
@@ -66,8 +67,14 @@ public class UserController {
         }
 
         Usuario usuario = usuarioExistente.get();
+        
+        // Atualiza os dados básicos
         usuario.setNome(dadosAtualizados.getNome());
         usuario.setRole(dadosAtualizados.getRole());
+        
+        // FALTAVAM ESSAS DUAS LINHAS:
+        usuario.setLogin(dadosAtualizados.getLogin()); // Permite corrigir o email do usuário
+        usuario.setAtivo(dadosAtualizados.getAtivo()); // Aplica a alteração do Toggle!
         
         // Só atualiza a senha se uma nova for enviada
         if (dadosAtualizados.getPassword() != null && !dadosAtualizados.getPassword().isEmpty()) {

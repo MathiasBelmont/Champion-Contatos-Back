@@ -29,7 +29,8 @@ public class SecurityFilter extends OncePerRequestFilter {
             var login = tokenService.validateToken(token);
             UserDetails user = usuarioRepository.findByLogin(login);
 
-            if(user != null){
+            // CORREÇÃO AQUI: Agora ele também verifica se o usuário está ativo (isEnabled)
+            if(user != null && user.isEnabled()){
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

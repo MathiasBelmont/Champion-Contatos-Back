@@ -6,9 +6,11 @@ import champion.com.demo.infra.security.TokenService;
 import champion.com.demo.domain.repositories.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,15 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
+        
+        // 1. Busca o usuário no banco antes de tentar fazer login
+        UserDetails userDetails = repository.findByLogin(data.login());
+        
+        // 2. Se o usuário existir mas estiver inativo, bloqueia imediatamente
+        if (userDetails != null && !userDetails.isEnabled()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário inativo. Acesso negado.");
+        }
+
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.senha());
             var auth = this.authenticationManager.authenticate(usernamePassword);
@@ -36,7 +47,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(new LoginResponseDTO(token));
         } catch (org.springframework.security.core.AuthenticationException e) {
-            e.printStackTrace(); // <--- ADICIONE ISSO
+            e.printStackTrace(); 
             return ResponseEntity.status(401).build();
         }
     }
@@ -54,7 +65,7 @@ public class AuthenticationController {
     }
 }
 
-// DTOs auxiliares (podem ficar no mesmo arquivo ou em arquivos separados)
+// DTOs
 record AuthenticationDTO(String login, String senha) {}
 record RegisterDTO(String login, String senha, UserRole role) {}
 record LoginResponseDTO(String token) {}
